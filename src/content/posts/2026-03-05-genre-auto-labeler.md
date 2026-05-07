@@ -18,9 +18,9 @@ tags: ["Antigravity", "DJ", "開発"]
 
 件のAntigravityですが、画面の左っかわにあるチャットに「こういうアプリ作って～」と要件を投げたらなんと全自動でそれを作ってくれる夢のようなツールです。
 
-![](https://www.roman-ease.com/wp-content/uploads/2026/03/661d5558b47597a7dfd6ff69a0347e67-1-1024x685.jpg)
+![](/uploads/2026/03/661d5558b47597a7dfd6ff69a0347e67-1-1024x685.jpg)
 
-![](https://www.roman-ease.com/wp-content/uploads/2026/03/f489ca1a72bae94c20c76320de3c168d-1024x690.jpg)
+![](/uploads/2026/03/f489ca1a72bae94c20c76320de3c168d-1024x690.jpg)
 
 ### Genre更新ルール
 
