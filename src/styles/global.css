@@ -43,7 +43,8 @@ img { max-width: 100%; height: auto; display: block; }
    固定幅レイアウト
 ============================ */
 .site-wrapper {
-  width: var(--w);
+  width: 100%;
+  max-width: var(--w);
   margin: 0 auto;
   padding: 0 2rem;
 }
