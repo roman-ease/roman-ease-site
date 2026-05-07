@@ -18,26 +18,33 @@ const pageTitle = title ? `${title} – ${siteTitle}` : siteTitle;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
     <title>{pageTitle}</title>
-    <link rel="icon" href="/uploads/cropped-icon.jpg" />
+    <link rel="icon" href="/uploads/2024/12/cropped-icon.jpg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   </head>
   <body>
     <div class="site-wrapper">
       <header class="site-header">
-        <a href="/">
+        <a href="/" class="header-image-link">
           <img
             class="header-image"
-            src="/uploads/header-image-roman-ease01.jpg"
-            alt="ローマの生き恥"
-            width="400"
-            height="400"
+            src="/uploads/2024/12/header-image-roman-ease01.jpg"
+            alt={siteTitle}
+            width="320"
+            height="320"
           />
         </a>
+        <h1 class="site-title"><a href="/">{siteTitle}</a></h1>
+        <p class="site-description">{description}</p>
         <nav class="site-nav">
-          <a href="/">ホーム</a>
-          <a href="/profile/">Profile</a>
           <a href="/forms/">Forms</a>
+          <a href="/">Home</a>
+          <a href="/profile/">Profile</a>
           <a href="/umai/">うまい店一覧</a>
         </nav>
+        <div class="header-separator">
+          <span class="header-separator-ornament">◆</span>
+        </div>
       </header>
 
       <main>
@@ -45,10 +52,13 @@ const pageTitle = title ? `${title} – ${siteTitle}` : siteTitle;
       </main>
 
       <footer class="site-footer">
+        <div class="footer-separator">
+          <span style="font-size:0.55rem; color:var(--accent); opacity:0.4;">◆</span>
+        </div>
         <nav class="site-nav">
-          <a href="/">ホーム</a>
-          <a href="/profile/">Profile</a>
           <a href="/forms/">Forms</a>
+          <a href="/">Home</a>
+          <a href="/profile/">Profile</a>
           <a href="/umai/">うまい店一覧</a>
         </nav>
       </footer>

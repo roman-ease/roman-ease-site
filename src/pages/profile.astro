@@ -3,17 +3,54 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 ---
 
 <BaseLayout title="Profile">
-  <article class="post-content">
+  <article>
     <img
       class="profile-image"
-      src="/uploads/MyNFC_design003-scaled.jpg"
+      src="/uploads/2024/12/MyNFC_design003-scaled.jpg"
       alt="ろまゑ"
       width="600"
     />
-
-    <p style="margin-top: 1.5rem; font-size: 1.25rem;"><strong>ろまゑ</strong></p>
-
-    <p>Twitter：<a href="https://x.com/romae216k">@romae216k</a></p>
-    <p>Bluesky：<a href="https://bsky.app/profile/roman-ease.com">@roman-ease.com</a></p>
+    <div class="profile-body">
+      <p class="profile-name">ろまゑ</p>
+      <ul class="profile-links">
+        <li>Twitter / X：<a href="https://x.com/romae216k">@romae216k</a></li>
+        <li>Bluesky：<a href="https://bsky.app/profile/roman-ease.com">@roman-ease.com</a></li>
+        <li>mixi2：<a href="https://mixi.social/@romanease">@romanease</a></li>
+        <li>Mail：<a href="mailto:contact@roman-ease.com">contact@roman-ease.com</a></li>
+      </ul>
+    </div>
   </article>
 </BaseLayout>
+
+<style>
+  .profile-image {
+    width: 100%;
+    max-width: 540px;
+    border-radius: 6px;
+    margin: 0 auto 2rem;
+  }
+  .profile-body {
+    max-width: 480px;
+    margin: 0 auto;
+  }
+  .profile-name {
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: var(--green-3);
+    margin: 0 0 1rem;
+  }
+  .profile-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    font-size: 1rem;
+  }
+  .profile-links a {
+    color: var(--green-2);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+</style>

@@ -3,9 +3,18 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 ---
 
 <BaseLayout title="うまい店一覧">
-  <article class="post-content">
+  <article class="page-content">
     <h2>うまい店一覧</h2>
     <p>おすすめの飲食店を随時追加予定です。</p>
-    <p>おすすめのお店は<a href="/forms/">こちらのフォーム</a>からご投稿ください。</p>
+    <p>お店情報は<a href="/forms/">こちらのフォーム</a>からご投稿ください。</p>
   </article>
 </BaseLayout>
+
+<style>
+  .page-content h2 {
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: var(--green-3);
+    margin: 0 0 1rem;
+  }
+</style>
