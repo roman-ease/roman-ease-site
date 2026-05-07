@@ -30,7 +30,9 @@ body {
   font-size: 17px;
   line-height: 1.9;
   color: var(--ink);
-  background: var(--bg);
+  background-color: var(--bg);
+  background-image: url('/texture.png');
+  background-size: auto;
 }
 
 a { color: var(--accent); text-decoration: none; }
