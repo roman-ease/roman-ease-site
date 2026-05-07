@@ -1,0 +1,243 @@
+---
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbxL6Q9578Tcm5tYXfbWzl09BZ2bb-Tvog87T1T72nD1BNtWc-93qXCEW2b7hJ6COWglEQ/exec';
+---
+
+<section class="umai-form-section">
+  <h2 class="umai-form-title">おすすめ飲食店を投稿する</h2>
+
+  <div class="form-notice">
+    <p>※ 投稿内容は、ブログ掲載時に誤字修正・表記統一、一部編集を行う場合があります。</p>
+    <p>※ 写真は、投稿者本人が撮影したもの、または掲載許可を得たものを投稿してください。</p>
+    <p>※ 人物の顔や個人情報が写り込んでいる写真は、掲載を見送る場合があります。</p>
+  </div>
+
+  <form class="umai-form" novalidate>
+
+    <div class="form-row">
+      <label>投稿者名（ハンドルネーム可）<span class="opt">任意</span></label>
+      <p class="field-hint">空欄の場合は「匿名」として掲載します。</p>
+      <input name="submitterName" type="text" placeholder="例: たろう" />
+    </div>
+
+    <div class="form-row">
+      <label>店舗名 <span class="req">*</span></label>
+      <input name="shopName" type="text" placeholder="例: 一蘭 渋谷店" required />
+    </div>
+
+    <div class="form-row">
+      <label>場所 <span class="req">*</span></label>
+      <p class="field-hint">住所、地域名、最寄り駅など分かる範囲でOKです。</p>
+      <input name="area" type="text" placeholder="例: 渋谷、秋葉原3丁目、大阪難波駅徒歩5分" required />
+    </div>
+
+    <div class="form-row">
+      <fieldset class="check-group">
+        <legend>お店のジャンル <span class="opt">任意</span></legend>
+        {['ランチ', 'ディナー', 'カフェ・軽食', 'スイーツ', '居酒屋・バー', 'テイクアウト'].map(g => (
+          <label class="check-label">
+            <input type="checkbox" name="genre" value={g} /> {g}
+          </label>
+        ))}
+        <label class="check-label check-other">
+          <input type="checkbox" name="genre" value="その他" class="genre-other-check" /> その他：
+          <input type="text" name="genreOther" placeholder="自由記入" class="other-text" disabled />
+        </label>
+      </fieldset>
+    </div>
+
+    <div class="form-row">
+      <label>おすすめポイント <span class="req">*</span></label>
+      <p class="field-hint">おすすめメニュー、雰囲気、コスパ、利用シーンなど自由に書いてください。</p>
+      <textarea name="recommendation" rows="6"
+        placeholder="例: ランチの日替わり定食が600円でボリューム満点。魚料理が特にうまい。" required></textarea>
+    </div>
+
+    <div class="form-row">
+      <fieldset class="radio-group">
+        <legend>予算感 <span class="opt">任意</span></legend>
+        {['1,000円以下', '1,000〜3,000円', '3,000〜5,000円', '5,000円以上', '不明'].map(b => (
+          <label class="radio-label">
+            <input type="radio" name="budget" value={b} /> {b}
+          </label>
+        ))}
+      </fieldset>
+    </div>
+
+    <div class="form-row">
+      <label>リンク <span class="opt">任意</span></label>
+      <p class="field-hint">公式サイト、Googleマップ、食べログ、SNSなど</p>
+      <input name="link" type="url" placeholder="https://..." />
+    </div>
+
+    <div class="form-row">
+      <label>写真 <span class="opt">任意・最大5枚・合計20MBまで</span></label>
+      <div class="file-drop">
+        <input type="file" accept="image/*" multiple class="file-input" />
+        <p class="file-drop-label">クリックまたはドラッグ＆ドロップ</p>
+        <p class="file-drop-hint">JPEG / PNG / WebP など</p>
+      </div>
+      <div class="file-preview"></div>
+      <p class="file-error"></p>
+    </div>
+
+    <div class="form-msg" aria-live="polite"></div>
+    <button type="submit" class="form-submit">送信する</button>
+  </form>
+</section>
+
+<script define:vars={{ GAS_URL }}>
+(function () {
+  // 同一ページに複数設置可能なよう querySelectorAll で全フォームを対象にする
+  document.querySelectorAll('.umai-form').forEach(form => {
+    const section   = form.closest('.umai-form-section');
+    const fileInput = form.querySelector('.file-input');
+    const fileDrop  = form.querySelector('.file-drop');
+    const preview   = form.querySelector('.file-preview');
+    const fileErr   = form.querySelector('.file-error');
+    const msg       = form.querySelector('.form-msg');
+    const btn       = form.querySelector('.form-submit');
+    const MAX_FILES = 5, MAX_MB = 20;
+
+    fileInput.addEventListener('change', () => renderPreviews(Array.from(fileInput.files)));
+    fileDrop.addEventListener('dragover', e => { e.preventDefault(); fileDrop.classList.add('dragover'); });
+    fileDrop.addEventListener('dragleave', () => fileDrop.classList.remove('dragover'));
+    fileDrop.addEventListener('drop', e => {
+      e.preventDefault(); fileDrop.classList.remove('dragover');
+      fileInput.files = e.dataTransfer.files;
+      renderPreviews(Array.from(fileInput.files));
+    });
+
+    function renderPreviews(files) {
+      fileErr.textContent = ''; preview.innerHTML = '';
+      const totalMB = files.reduce((s, f) => s + f.size, 0) / 1024 / 1024;
+      if (files.length > MAX_FILES) { fileErr.textContent = `写真は最大${MAX_FILES}枚までです。`; return; }
+      if (totalMB > MAX_MB) { fileErr.textContent = `合計${MAX_MB}MBを超えています（${totalMB.toFixed(1)}MB）。`; return; }
+      files.forEach(file => {
+        const reader = new FileReader();
+        reader.onload = e => {
+          const wrap = document.createElement('div');
+          wrap.className = 'preview-item';
+          wrap.innerHTML = `<img src="${e.target.result}" alt="${file.name}"/><span class="preview-name">${file.name}</span>`;
+          preview.appendChild(wrap);
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+
+    function fileToBase64(file) {
+      return new Promise((res, rej) => {
+        const r = new FileReader();
+        r.onload  = () => res({ data: r.result.split(',')[1], name: file.name, mimeType: file.type || 'image/jpeg', size: file.size });
+        r.onerror = rej;
+        r.readAsDataURL(file);
+      });
+    }
+
+    form.querySelector('.genre-other-check').addEventListener('change', function () {
+      form.querySelector('.other-text').disabled = !this.checked;
+    });
+
+    form.addEventListener('submit', async e => {
+      e.preventDefault();
+      msg.textContent = ''; msg.className = 'form-msg';
+      const shopName = form.querySelector('[name=shopName]').value.trim();
+      const area     = form.querySelector('[name=area]').value.trim();
+      const rec      = form.querySelector('[name=recommendation]').value.trim();
+      if (!shopName) { showMsg('「店舗名」を入力してください。', 'error'); return; }
+      if (!area)     { showMsg('「場所」を入力してください。', 'error'); return; }
+      if (!rec)      { showMsg('「おすすめポイント」を入力してください。', 'error'); return; }
+
+      const genreChecks = Array.from(form.querySelectorAll('[name=genre]:checked')).map(el => {
+        if (el.value === 'その他') { const t = form.querySelector('.other-text').value.trim(); return t ? `その他（${t}）` : 'その他'; }
+        return el.value;
+      });
+
+      const files   = Array.from(fileInput.files);
+      const totalMB = files.reduce((s, f) => s + f.size, 0) / 1024 / 1024;
+      if (files.length > MAX_FILES) { showMsg(`写真は最大${MAX_FILES}枚です。`, 'error'); return; }
+      if (totalMB > MAX_MB)         { showMsg(`合計${MAX_MB}MBを超えています。`, 'error'); return; }
+
+      btn.disabled = true;
+      btn.textContent = files.length > 0 ? '画像をアップロード中...' : '送信中...';
+
+      try {
+        const images = await Promise.all(files.map(fileToBase64));
+        await fetch(GAS_URL, {
+          method: 'POST', mode: 'no-cors',
+          headers: { 'Content-Type': 'text/plain' },
+          body: JSON.stringify({
+            shopName, area, genre: genreChecks, recommendation: rec,
+            budget:       (form.querySelector('[name=budget]:checked') || {}).value || '不明',
+            link:         form.querySelector('[name=link]').value.trim(),
+            submitterName: form.querySelector('[name=submitterName]').value.trim() || '匿名',
+            images,
+          }),
+        });
+        form.reset(); preview.innerHTML = '';
+        showMsg('送信しました！内容を確認後に掲載します。ありがとうございます 🎉', 'success');
+      } catch {
+        showMsg('送信に失敗しました。時間をおいて再度お試しください。', 'error');
+      } finally {
+        btn.disabled = false; btn.textContent = '送信する';
+      }
+    });
+
+    function showMsg(text, type) { msg.textContent = text; msg.className = `form-msg form-msg--${type}`; }
+  });
+})();
+</script>
+
+<style>
+  .umai-form-title {
+    font-family: var(--decol);
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--accent);
+    margin: 0 0 1rem;
+  }
+  .form-notice {
+    border-left: 2px solid var(--rule);
+    padding: 0.5rem 1rem;
+    margin-bottom: 1.8rem;
+    font-size: 0.82rem;
+    color: var(--muted);
+    font-family: var(--sans);
+  }
+  .form-notice p { margin: 0.2rem 0; }
+  .umai-form { display: flex; flex-direction: column; gap: 1.4rem; }
+  .form-row { display: flex; flex-direction: column; gap: 0.3rem; }
+  .form-row label, fieldset legend { font-size: 0.88rem; color: var(--ink); font-family: var(--sans); font-weight: 500; }
+  .field-hint { margin: 0; font-size: 0.78rem; color: var(--muted); font-family: var(--sans); }
+  .req { color: var(--accent); font-size: 0.78rem; margin-left: 0.2rem; }
+  .opt { color: var(--muted); font-size: 0.75rem; font-weight: 400; margin-left: 0.2rem; }
+  .form-row input[type="text"], .form-row input[type="url"], .form-row textarea {
+    padding: 0.55rem 0.75rem; border: 1px solid var(--rule); border-radius: 3px;
+    background: #faf6ee; font-family: var(--serif); font-size: 0.95rem; color: var(--ink);
+    outline: none; transition: border-color 0.15s;
+  }
+  .form-row input:focus, .form-row textarea:focus { border-color: var(--accent-lt); }
+  .form-row textarea { resize: vertical; }
+  fieldset { border: none; padding: 0; margin: 0; }
+  fieldset legend { margin-bottom: 0.5rem; }
+  .check-group, .radio-group { display: flex; flex-wrap: wrap; gap: 0.4rem 1rem; }
+  .check-label, .radio-label { display: flex; align-items: center; gap: 0.35rem; font-size: 0.9rem; color: var(--ink); cursor: pointer; font-family: var(--sans); }
+  .check-other { flex-wrap: wrap; }
+  .other-text { padding: 0.2rem 0.5rem; border: 1px solid var(--rule); border-radius: 3px; background: #faf6ee; font-size: 0.88rem; width: 140px; font-family: var(--serif); }
+  .other-text:disabled { opacity: 0.4; }
+  .file-drop { position: relative; border: 1px dashed var(--rule); border-radius: 4px; padding: 1.5rem 1rem; text-align: center; cursor: pointer; background: #faf6ee; transition: border-color 0.15s, background 0.15s; }
+  .file-drop.dragover { border-color: var(--accent-lt); background: rgba(49,100,96,0.05); }
+  .file-input { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
+  .file-drop-label { margin: 0; font-size: 0.9rem; color: var(--accent); }
+  .file-drop-hint { margin: 0.2rem 0 0; font-size: 0.78rem; color: var(--muted); font-family: var(--sans); }
+  .file-preview { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 0.6rem; }
+  .preview-item { display: flex; flex-direction: column; align-items: center; gap: 0.25rem; width: 100px; }
+  .preview-item img { width: 100px; height: 80px; object-fit: cover; border-radius: 3px; border: 1px solid var(--rule); }
+  .preview-name { font-size: 0.7rem; color: var(--muted); word-break: break-all; text-align: center; font-family: var(--sans); }
+  .file-error { font-size: 0.82rem; color: #b04040; font-family: var(--sans); min-height: 1rem; }
+  .form-msg { font-family: var(--sans); font-size: 0.88rem; min-height: 1.4rem; }
+  .form-msg--success { color: var(--accent); }
+  .form-msg--error { color: #b04040; }
+  .form-submit { align-self: flex-start; padding: 0.65rem 2rem; background: var(--accent); color: #fff; border: none; border-radius: 3px; font-family: var(--serif); font-size: 1rem; cursor: pointer; transition: opacity 0.15s; }
+  .form-submit:hover { opacity: 0.85; }
+  .form-submit:disabled { opacity: 0.5; cursor: default; }
+</style>

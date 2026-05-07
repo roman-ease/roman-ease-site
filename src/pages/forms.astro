@@ -1,37 +1,8 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
+import UmaiForm from '@/components/UmaiForm.astro';
 ---
 
-<BaseLayout title="Forms">
-  <article class="page-content">
-    <h2>おすすめ飯屋・居酒屋フォーム</h2>
-    <p>おすすめのご飯屋さん、居酒屋等飲食店を自由に投稿していただき、投稿された内容を元に私の方で紹介用の投稿を「うまい店」に投稿いたします。</p>
-    <p>
-      <a class="form-link" href="https://docs.google.com/forms/d/e/1FAIpQLSd6ym43Pg6EfMI9lKIShuCDYMFMvHDoiqNLxPvFQOGZ8lb6_w/viewform?usp=dialog" target="_blank" rel="noopener">
-        フォームを開く →
-      </a>
-    </p>
-  </article>
+<BaseLayout title="Forms" description="おすすめ飲食店の投稿フォームです。">
+  <UmaiForm />
 </BaseLayout>
-
-<style>
-  .page-content h2 {
-    font-size: 1.5rem;
-    font-weight: 500;
-    color: var(--green-3);
-    margin: 0 0 1rem;
-  }
-  .form-link {
-    display: inline-block;
-    padding: 0.5rem 1.2rem;
-    border: 1px solid var(--green-1);
-    border-radius: 3px;
-    color: var(--green-2);
-    font-size: 0.95rem;
-    transition: background 0.15s;
-  }
-  .form-link:hover {
-    background: var(--green-0);
-    text-decoration: none;
-  }
-</style>
