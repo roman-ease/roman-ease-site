@@ -13,7 +13,7 @@ export async function onRequestGet({ request, env }) {
       'Accept': 'application/json',
     },
     body: JSON.stringify({
-      client_id:     env.GITHUB_CLIENT_ID || 'Ov23li5zG6wWefYBBKoU',
+      client_id:     (env.GITHUB_CLIENT_ID || 'Ov23li5zG6wWefYBBKoU').trim(),
       client_secret: env.GITHUB_CLIENT_SECRET,
       code,
     }),
