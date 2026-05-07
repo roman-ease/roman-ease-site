@@ -3,6 +3,7 @@ title: "🏆 KAOTY（Kasu Anime Of The Year）25s' 開催趣意書"
 date: 2025-10-21
 categories: ["KAOTY"]
 tags: ["KAOTY", "アニメ"]
+description: "その年最もカスだったアニメを決める年次イベント、KAOTY 25s'の開催趣意書。"
 ---
 ## ■ 概要
 
