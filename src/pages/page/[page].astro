@@ -1,0 +1,34 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PostList from '@/components/PostList.astro';
+import Pagination from '@/components/Pagination.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const POSTS_PER_PAGE = 10;
+  const allPosts = (await getCollection('posts', ({ data }) => !data.draft))
+    .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+  const totalPages = Math.ceil(allPosts.length / POSTS_PER_PAGE);
+
+  // ページ2以降を生成（ページ1はindex.astroが担当）
+  return Array.from({ length: totalPages - 1 }, (_, i) => {
+    const page = i + 2;
+    return {
+      params: { page: String(page) },
+      props: {
+        posts: allPosts.slice((page - 1) * POSTS_PER_PAGE, page * POSTS_PER_PAGE),
+        currentPage: page,
+        totalPages,
+      },
+    };
+  });
+}
+
+const { posts, currentPage, totalPages } = Astro.props;
+---
+
+<BaseLayout title={`記事一覧 (${currentPage}ページ目)`}>
+  <PostList posts={posts} />
+  <Pagination currentPage={currentPage} totalPages={totalPages} />
+</BaseLayout>

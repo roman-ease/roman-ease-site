@@ -1,40 +1,76 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
+import TableOfContents from '@/components/TableOfContents.astro';
 import { getCollection } from 'astro:content';
 
 export async function getStaticPaths() {
   const posts = await getCollection('posts', ({ data }) => !data.draft);
-  return posts.map((post) => ({
+  const sorted = posts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+  return sorted.map((post, i) => ({
     params: { slug: post.slug },
-    props: { post },
+    props: {
+      post,
+      prev: sorted[i + 1] ?? null,  // 古い記事
+      next: sorted[i - 1] ?? null,  // 新しい記事
+    },
   }));
 }
 
-const { post } = Astro.props;
-const { Content } = await post.render();
+const { post, prev, next } = Astro.props;
+const { Content, headings } = await post.render();
 
 function formatDate(date: Date) {
   return date.toLocaleDateString('ja-JP', { year: 'numeric', month: 'long', day: 'numeric' });
 }
 ---
 
-<BaseLayout title={post.data.title}>
+<BaseLayout
+  title={post.data.title}
+  description={post.data.description}
+  ogImage={post.data.image}
+>
   <article>
+    {post.data.image && (
+      <img class="post-eyecatch" src={post.data.image} alt={post.data.title} />
+    )}
     <header class="post-header">
       <h1>{post.data.title}</h1>
       <div class="post-meta">
         <time datetime={post.data.date.toISOString()}>{formatDate(post.data.date)}</time>
         {post.data.categories.map((cat) => (
-          <a href={`/category/${encodeURIComponent(cat)}/`} class="badge">{cat}</a>
+          <a href={`/category/${cat}/`} class="badge">{cat}</a>
         ))}
         {post.data.tags.map((tag) => (
-          <a href={`/tag/${encodeURIComponent(tag)}/`} class="badge">{tag}</a>
+          <a href={`/tag/${tag}/`} class="badge">{tag}</a>
         ))}
       </div>
     </header>
+
+    <TableOfContents headings={headings} />
+
     <div class="post-content">
       <Content />
     </div>
+
+    <nav class="post-nav">
+      <div class="post-nav-item post-nav-prev">
+        {prev && (
+          <>
+            <span class="post-nav-label">← 前の記事</span>
+            <a href={`/posts/${prev.slug}/`}>{prev.data.title}</a>
+          </>
+        )}
+      </div>
+      <div class="post-nav-item post-nav-next">
+        {next && (
+          <>
+            <span class="post-nav-label">次の記事 →</span>
+            <a href={`/posts/${next.slug}/`}>{next.data.title}</a>
+          </>
+        )}
+      </div>
+    </nav>
+
     <div class="post-footer">
       <a href="/" class="back-link">← 記事一覧に戻る</a>
     </div>
@@ -42,13 +78,39 @@ function formatDate(date: Date) {
 </BaseLayout>
 
 <style>
-  .post-footer {
+  .post-eyecatch {
+    width: 100%;
+    max-height: 360px;
+    object-fit: cover;
+    border-radius: 4px;
+    margin-bottom: 1.5rem;
+  }
+  .post-nav {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
     margin-top: 3rem;
     padding-top: 1.5rem;
-    border-top: 1px dashed var(--beige-3);
+    border-top: 1px solid var(--rule);
+    font-size: 0.88rem;
   }
-  .back-link {
-    font-size: 0.9rem;
-    color: var(--green-2);
+  .post-nav-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
   }
+  .post-nav-next { text-align: right; }
+  .post-nav-label {
+    font-size: 0.78rem;
+    color: var(--muted);
+    font-family: var(--sans);
+  }
+  .post-nav-item a { color: var(--accent); line-height: 1.4; }
+  .post-footer {
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px dashed var(--rule);
+  }
+  .back-link { font-size: 0.88rem; color: var(--muted); }
+  .back-link:hover { color: var(--accent); }
 </style>

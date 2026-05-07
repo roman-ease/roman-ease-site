@@ -298,3 +298,119 @@ img { max-width: 100%; height: auto; display: block; }
   margin: 0.4rem 0 1rem;
 }
 .post-content li { margin-bottom: 0.15rem; }
+
+/* ============================
+   セパレータ共通
+============================ */
+.header-separator,
+.footer-separator {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: var(--rule);
+}
+.header-separator { margin: 0 0 2rem; }
+.footer-separator { margin: 2.5rem 0 1.6rem; }
+.header-separator::before, .header-separator::after,
+.footer-separator::before, .footer-separator::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--rule);
+}
+.ornament {
+  font-size: 0.55rem;
+  color: var(--accent);
+  opacity: 0.45;
+}
+.footer-rss {
+  margin-top: 0.8rem;
+  font-size: 0.8rem;
+}
+.footer-rss a { color: var(--muted); }
+
+/* ============================
+   アーカイブページ（カテゴリ・タグ）
+============================ */
+.archive-header {
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--rule);
+}
+.archive-label {
+  margin: 0;
+  font-size: 0.75rem;
+  font-family: var(--sans);
+  color: var(--muted);
+  letter-spacing: 0.1em;
+  text-transform: lowercase;
+}
+.archive-title {
+  margin: 0.1rem 0 0.2rem;
+  font-size: 1.6rem;
+  font-weight: 500;
+  color: var(--accent);
+}
+.archive-count {
+  margin: 0;
+  font-size: 0.82rem;
+  font-family: var(--sans);
+  color: var(--muted);
+}
+
+/* ============================
+   目次（TOC）
+============================ */
+.toc {
+  background: rgba(49,100,96,0.05);
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  padding: 1rem 1.2rem;
+  margin-bottom: 2rem;
+  font-size: 0.88rem;
+}
+.toc-title {
+  margin: 0 0 0.5rem;
+  font-size: 0.78rem;
+  font-family: var(--sans);
+  color: var(--muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.toc-list {
+  margin: 0;
+  padding-left: 1.2rem;
+  line-height: 1.7;
+}
+.toc-item a { color: var(--accent-lt); }
+.toc-item a:hover { color: var(--accent); text-decoration: underline; }
+.toc-h3 { padding-left: 1rem; font-size: 0.84rem; }
+
+/* ============================
+   ページネーション
+============================ */
+.pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 2.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--rule);
+  font-size: 0.88rem;
+  font-family: var(--sans);
+}
+.pagination-link { color: var(--accent); }
+.pagination-link:hover { text-decoration: underline; }
+.pagination-disabled { color: var(--rule); cursor: default; }
+.pagination-info { color: var(--muted); font-size: 0.8rem; }
+
+/* ============================
+   アイキャッチサムネイル（一覧）
+============================ */
+.post-thumbnail {
+  width: 100%;
+  max-height: 220px;
+  object-fit: cover;
+  border-radius: 3px;
+  margin-bottom: 0.8rem;
+}

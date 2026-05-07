@@ -4,11 +4,17 @@ import '@/styles/global.css';
 interface Props {
   title?: string;
   description?: string;
+  ogImage?: string;
 }
 
-const { title, description = 'living in disgrace in Rome' } = Astro.props;
-const siteTitle = 'ローマの生き恥';
-const pageTitle = title ? `${title} – ${siteTitle}` : siteTitle;
+const { title, description, ogImage } = Astro.props;
+const siteTitle   = 'ローマの生き恥';
+const siteDesc    = 'living in disgrace in Rome';
+const pageTitle   = title ? `${title} – ${siteTitle}` : siteTitle;
+const pageDesc    = description ?? siteDesc;
+const defaultOg   = '/uploads/2024/12/header-image-roman-ease01.jpg';
+const ogImageUrl  = new URL(ogImage ?? defaultOg, Astro.site).toString();
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 ---
 
 <!doctype html>
@@ -16,9 +22,25 @@ const pageTitle = title ? `${title} – ${siteTitle}` : siteTitle;
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalURL} />
+    <meta name="description" content={pageDesc} />
+
+    <!-- OGP -->
+    <meta property="og:type"        content="website" />
+    <meta property="og:url"         content={canonicalURL} />
+    <meta property="og:title"       content={pageTitle} />
+    <meta property="og:description" content={pageDesc} />
+    <meta property="og:image"       content={ogImageUrl} />
+    <meta property="og:site_name"   content={siteTitle} />
+    <meta property="og:locale"      content="ja_JP" />
+    <meta name="twitter:card"       content="summary_large_image" />
+    <meta name="twitter:title"      content={pageTitle} />
+    <meta name="twitter:description" content={pageDesc} />
+    <meta name="twitter:image"      content={ogImageUrl} />
+
     <title>{pageTitle}</title>
-    <link rel="icon" href="/uploads/2024/12/cropped-icon.jpg" />
+    <link rel="icon"       href="/uploads/2024/12/cropped-icon.jpg" />
+    <link rel="alternate"  type="application/rss+xml" title={siteTitle} href="/rss.xml" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   </head>
@@ -35,7 +57,7 @@ const pageTitle = title ? `${title} – ${siteTitle}` : siteTitle;
           />
         </a>
         <h1 class="site-title"><a href="/">{siteTitle}</a></h1>
-        <p class="site-description">{description}</p>
+        <p class="site-description">{siteDesc}</p>
         <nav class="site-nav">
           <a href="/forms/">Forms</a>
           <a href="/">Home</a>
@@ -43,7 +65,7 @@ const pageTitle = title ? `${title} – ${siteTitle}` : siteTitle;
           <a href="/umai/">うまい店一覧</a>
         </nav>
         <div class="header-separator">
-          <span class="header-separator-ornament">◆</span>
+          <span class="ornament">◆</span>
         </div>
       </header>
 
@@ -53,7 +75,7 @@ const pageTitle = title ? `${title} – ${siteTitle}` : siteTitle;
 
       <footer class="site-footer">
         <div class="footer-separator">
-          <span style="font-size:0.55rem; color:var(--accent); opacity:0.4;">◆</span>
+          <span class="ornament">◆</span>
         </div>
         <nav class="site-nav">
           <a href="/forms/">Forms</a>
@@ -61,6 +83,9 @@ const pageTitle = title ? `${title} – ${siteTitle}` : siteTitle;
           <a href="/profile/">Profile</a>
           <a href="/umai/">うまい店一覧</a>
         </nav>
+        <p class="footer-rss">
+          <a href="/rss.xml">RSS</a>
+        </p>
       </footer>
     </div>
   </body>

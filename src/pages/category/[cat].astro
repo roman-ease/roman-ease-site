@@ -1,0 +1,30 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PostList from '@/components/PostList.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const allPosts = await getCollection('posts', ({ data }) => !data.draft);
+  const categories = [...new Set(allPosts.flatMap(p => p.data.categories))];
+  return categories.map(cat => ({
+    params: { cat },
+    props: {
+      cat,
+      posts: allPosts
+        .filter(p => p.data.categories.includes(cat))
+        .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf()),
+    },
+  }));
+}
+
+const { cat, posts } = Astro.props;
+---
+
+<BaseLayout title={`カテゴリ: ${cat}`}>
+  <div class="archive-header">
+    <p class="archive-label">category</p>
+    <h2 class="archive-title">{cat}</h2>
+    <p class="archive-count">{posts.length}件</p>
+  </div>
+  <PostList posts={posts} />
+</BaseLayout>

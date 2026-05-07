@@ -1,0 +1,28 @@
+---
+interface Props {
+  currentPage: number;
+  totalPages: number;
+}
+
+const { currentPage, totalPages } = Astro.props;
+
+function pageUrl(page: number) {
+  return page === 1 ? '/' : `/page/${page}/`;
+}
+---
+
+{totalPages > 1 && (
+  <nav class="pagination">
+    {currentPage > 1 ? (
+      <a href={pageUrl(currentPage - 1)} class="pagination-link">← 新しい記事</a>
+    ) : (
+      <span class="pagination-link pagination-disabled">← 新しい記事</span>
+    )}
+    <span class="pagination-info">{currentPage} / {totalPages}</span>
+    {currentPage < totalPages ? (
+      <a href={pageUrl(currentPage + 1)} class="pagination-link">古い記事 →</a>
+    ) : (
+      <span class="pagination-link pagination-disabled">古い記事 →</span>
+    )}
+  </nav>
+)}

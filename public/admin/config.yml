@@ -1,0 +1,61 @@
+backend:
+  name: github
+  repo: roman-ease/roman-ease-site
+  branch: main
+  # GitHub OAuth App の Client ID を設定（下記セットアップ手順参照）
+  # auth_type: pkce
+  # app_id: YOUR_GITHUB_OAUTH_CLIENT_ID
+
+media_folder: public/uploads/{{year}}/{{month}}
+public_folder: /uploads/{{year}}/{{month}}
+
+locale: ja
+
+slug:
+  encoding: ascii
+  clean_accents: true
+
+collections:
+  - name: posts
+    label: ブログ記事
+    label_singular: 記事
+    folder: src/content/posts
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    preview_path: /posts/{{slug}}/
+    fields:
+      - label: タイトル
+        name: title
+        widget: string
+      - label: 公開日
+        name: date
+        widget: datetime
+        date_format: YYYY-MM-DD
+        time_format: false
+        default: "{{now}}"
+      - label: カテゴリ
+        name: categories
+        widget: list
+        default: []
+        hint: "例: 日記, 技術, 趣味"
+      - label: タグ
+        name: tags
+        widget: list
+        default: []
+      - label: アイキャッチ画像
+        name: image
+        widget: image
+        required: false
+        choose_url: true
+      - label: OGP・RSS用の説明文
+        name: description
+        widget: text
+        required: false
+        hint: SNSシェアやRSSに使用。省略するとサイト説明文が使われます。
+      - label: 本文
+        name: body
+        widget: markdown
+      - label: 下書き
+        name: draft
+        widget: boolean
+        default: false
