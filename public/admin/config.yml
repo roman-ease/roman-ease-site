@@ -2,7 +2,7 @@ backend:
   name: github
   repo: roman-ease/roman-ease-site
   branch: main
-  base_url: https://roman-ease-site.pages.dev
+  base_url: https://www.roman-ease.com
   auth_endpoint: oauth
 
 media_folder: public/uploads/{{year}}/{{month}}

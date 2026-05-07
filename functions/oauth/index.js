@@ -9,7 +9,7 @@ export async function onRequestGet({ request, env }) {
   const authUrl = new URL('https://github.com/login/oauth/authorize');
   authUrl.searchParams.set('client_id', (env.GITHUB_CLIENT_ID || 'Ov23li5zG6wWefYBBKoU').trim());
   authUrl.searchParams.set('scope', 'repo,user');
-  authUrl.searchParams.set('redirect_uri', `${url.origin}/oauth/callback`);
+  authUrl.searchParams.set('redirect_uri', 'https://www.roman-ease.com/oauth/callback');
 
   return Response.redirect(authUrl.toString());
 }
