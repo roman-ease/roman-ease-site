@@ -22,6 +22,7 @@ const spots = (await getCollection('posts', ({ data }) =>
   <div class="divider"><span class="ornament">◆</span></div>
 
   <UmaiForm />
+  <p class="form-also">このフォームは <a href="/forms/umai/">Forms ページ</a> からもアクセスできます。</p>
 
 </BaseLayout>
 
@@ -37,4 +38,6 @@ const spots = (await getCollection('posts', ({ data }) =>
   .divider { display: flex; align-items: center; gap: 0.6rem; margin: 2.5rem 0; }
   .divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: var(--rule); }
   .ornament { font-size: 0.55rem; color: var(--accent); opacity: 0.45; }
+  .form-also { margin-top: 1.5rem; font-size: 0.82rem; color: var(--muted); text-align: center; }
+  .form-also a { color: var(--accent); }
 </style>

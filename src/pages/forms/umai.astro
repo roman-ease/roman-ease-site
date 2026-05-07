@@ -1,0 +1,22 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import UmaiForm from '@/components/UmaiForm.astro';
+---
+
+<BaseLayout title="うまい店フォーム" description="おすすめの飲食店を投稿してください。内容確認後に掲載します。">
+  <p class="breadcrumb">
+    <a href="/forms/">Forms</a> <span>›</span> うまい店フォーム
+  </p>
+  <UmaiForm />
+</BaseLayout>
+
+<style>
+  .breadcrumb {
+    font-family: var(--sans);
+    font-size: 0.82rem;
+    color: var(--muted);
+    margin: 0 0 1.5rem;
+  }
+  .breadcrumb a { color: var(--accent); }
+  .breadcrumb span { margin: 0 0.3rem; opacity: 0.5; }
+</style>
