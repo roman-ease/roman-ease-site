@@ -1,0 +1,39 @@
+---
+/**
+ * KAOTY 25s' ノミネートフォーム
+ *
+ * 翌年コピー手順:
+ *   1. このファイルを 26s.astro にコピー
+ *   2. 下の props を書き換えるだけ（コンポーネント側は変更不要）
+ */
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import KaotyForm from '@/components/KaotyForm.astro';
+---
+
+<BaseLayout
+  title="KAOTY 25s' ノミネート"
+  description="2025年放映アニメのKAOTYノミネートフォームです。"
+>
+  <p class="breadcrumb">
+    <a href="/forms/">Forms</a> <span>›</span> KAOTY 25s' ノミネート
+  </p>
+
+  <KaotyForm
+    season="25s"
+    title="🏆 KAOTY 25s' ノミネート"
+    description="2025年に放映されたアニメの中から「最もカスだった作品」をノミネートしてください。ノミネート数の集計結果をもとにKAOTY受賞作を決定します。"
+    period="2025/10/01 〜 2026/03/31"
+    maxNominations={3}
+  />
+</BaseLayout>
+
+<style>
+  .breadcrumb {
+    font-family: var(--sans);
+    font-size: 0.82rem;
+    color: var(--muted);
+    margin: 0 0 1.5rem;
+  }
+  .breadcrumb a { color: var(--accent); }
+  .breadcrumb span { margin: 0 0.3rem; opacity: 0.5; }
+</style>

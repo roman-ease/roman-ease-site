@@ -37,7 +37,10 @@ function doPost(e) {
   try {
     const data = JSON.parse(e.postData.contents);
 
-    // バリデーション
+    // フォーム種別で振り分け
+    if (data.type === 'kaoty') return handleKaoty(data);
+
+    // バリデーション（うまい店フォーム）
     for (const key of ['shopName', 'area', 'recommendation']) {
       if (!data[key] || !String(data[key]).trim()) {
         return json({ ok: false, error: `${key} は必須です` });
@@ -423,6 +426,88 @@ function tdStyle() { return 'padding:6px 12px;border:1px solid #c8bea0;'; }
 function btnStyle(bg) {
   return `display:inline-block;background:${bg};color:#fff;padding:12px 28px;` +
          `text-decoration:none;border-radius:4px;font-size:15px;margin-right:10px;`;
+}
+
+// ============================================================
+// KAOTY ノミネートフォーム
+// ============================================================
+
+/**
+ * KAOTYノミネートを受信してシートに記録する。
+ * シート名: kaoty_{season}（例: kaoty_25s）
+ * 新年度は season を変えるだけで自動的に新シートが作成される。
+ *
+ * 期待するデータ:
+ *   { type: 'kaoty', season: '25s', submitterName: '...', nominations: [...], comment: '...' }
+ */
+function handleKaoty(data) {
+  const season       = String(data.season || '').trim();
+  const nominations  = Array.isArray(data.nominations)
+    ? data.nominations.map(n => String(n).trim()).filter(Boolean)
+    : [];
+  const comment      = String(data.comment || '').trim();
+  const submitterName = String(data.submitterName || '匿名').trim() || '匿名';
+
+  if (!season)              return json({ ok: false, error: 'season が未指定です' });
+  if (nominations.length === 0) return json({ ok: false, error: 'ノミネート作品がありません' });
+
+  const sheetName = `kaoty_${season}`;
+  const ss        = SpreadsheetApp.getActiveSpreadsheet();
+  let sheet       = ss.getSheetByName(sheetName);
+
+  // 年度シートが未作成なら自動作成
+  if (!sheet) {
+    sheet = ss.insertSheet(sheetName);
+    sheet.getRange(1, 1, 1, 4).setValues([['timestamp', 'submitterName', 'nominations', 'comment']]);
+    sheet.setFrozenRows(1);
+  }
+
+  sheet.appendRow([
+    new Date(),
+    submitterName,
+    nominations.join(' / '),  // 複数作品を「/」区切りで記録
+    comment,
+  ]);
+
+  return json({ ok: true });
+}
+
+/**
+ * 集計用ヘルパー（GASエディタで手動実行して使う）
+ * 引数: season 文字列（例: '25s'）
+ * 実行すると「kaoty_25s_tally」シートに集計結果を書き出す
+ */
+function tallyKaoty(season) {
+  season = season || '25s';
+  const ss        = SpreadsheetApp.getActiveSpreadsheet();
+  const sheet     = ss.getSheetByName(`kaoty_${season}`);
+  if (!sheet) { Logger.log(`kaoty_${season} シートが見つかりません`); return; }
+
+  const lastRow = sheet.getLastRow();
+  if (lastRow <= 1) { Logger.log('データがありません'); return; }
+
+  const rows = sheet.getRange(2, 3, lastRow - 1, 1).getValues(); // nominations 列
+  const counts = {};
+  rows.forEach(([cell]) => {
+    String(cell).split('/').map(s => s.trim()).filter(Boolean).forEach(title => {
+      counts[title] = (counts[title] || 0) + 1;
+    });
+  });
+
+  const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1]);
+
+  // 集計シートに書き出し
+  const tallyName  = `kaoty_${season}_tally`;
+  let tallySheet   = ss.getSheetByName(tallyName);
+  if (!tallySheet) { tallySheet = ss.insertSheet(tallyName); }
+  tallySheet.clearContents();
+  tallySheet.getRange(1, 1, 1, 2).setValues([['作品名', 'ノミネート数']]);
+  if (sorted.length > 0) {
+    tallySheet.getRange(2, 1, sorted.length, 2).setValues(sorted);
+  }
+
+  Logger.log(`集計完了: ${sorted.length} 作品`);
+  sorted.slice(0, 10).forEach(([title, count]) => Logger.log(`${count}票 ${title}`));
 }
 
 function page(title, body) {

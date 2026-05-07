@@ -1,0 +1,256 @@
+---
+/**
+ * KaotyForm コンポーネント
+ *
+ * 使い方（年度ページでこれだけ書けばOK）:
+ *   <KaotyForm
+ *     season="25s"
+ *     title="KAOTY 25s'"
+ *     description="2025年放映のカスアニメをノミネートしてください。"
+ *     period="2025/10/01 〜 2026/03/31"
+ *   />
+ *
+ * 翌年コピペ手順:
+ *   1. forms/kaoty/25s.astro を 26s.astro にコピー
+ *   2. props の season / title / description / period を書き換え
+ *   3. GAS スクリプトプロパティに変更不要（シートは season 名で自動作成）
+ */
+
+interface Props {
+  season:      string;   // "25s", "26s" など
+  title:       string;   // "KAOTY 25s'"
+  description: string;   // フォーム上部の説明文
+  period:      string;   // 受付期間テキスト
+  maxNominations?: number; // 1人あたりの最大ノミネート数（デフォルト3）
+}
+
+const {
+  season,
+  title,
+  description,
+  period,
+  maxNominations = 3,
+} = Astro.props;
+
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbxL6Q9578Tcm5tYXfbWzl09BZ2bb-Tvog87T1T72nD1BNtWc-93qXCEW2b7hJ6COWglEQ/exec';
+const LS_KEY  = `kaoty_${season}_submitted`;
+---
+
+<section class="kaoty-form-section">
+  <h2 class="kaoty-title">{title}</h2>
+  <p class="kaoty-desc">{description}</p>
+
+  <div class="kaoty-meta">
+    <span class="kaoty-period">📅 受付期間：{period}</span>
+  </div>
+
+  <div class="kaoty-notice">
+    <p>※ 対象：TVアニメ・Web配信アニメ（OVA・映画除く）</p>
+    <p>※ 1ブラウザにつき1回のノミネートです。</p>
+    <p>※ ノミネート結果は集計後に発表します。</p>
+  </div>
+
+  <div id={`kaoty-already-${season}`} class="kaoty-already" style="display:none">
+    <p>✅ このブラウザからは投稿済みです。</p>
+  </div>
+
+  <form id={`kaoty-form-${season}`} class="kaoty-form" novalidate>
+    <!-- 投稿者名 -->
+    <div class="form-row">
+      <label>投稿者名 <span class="opt">任意</span></label>
+      <input name="submitterName" type="text" placeholder="ハンドルネーム可・空欄は匿名" maxlength="50" />
+    </div>
+
+    <!-- ノミネート作品 -->
+    <div class="form-row">
+      <label>ノミネート作品 <span class="req">*</span>（最大{maxNominations}作品）</label>
+      <p class="field-hint">作品名を1行ずつ入力してください。複数ある場合は順不同でOK。</p>
+      {Array.from({ length: maxNominations }, (_, i) => (
+        <div class="nomination-row">
+          <span class="nomination-num">{i + 1}</span>
+          <input
+            name={`nomination_${i}`}
+            type="text"
+            placeholder={i === 0 ? '例: ○○の△△（必須）' : '例: □□□□（任意）'}
+            required={i === 0}
+            maxlength="100"
+          />
+        </div>
+      ))}
+    </div>
+
+    <!-- コメント -->
+    <div class="form-row">
+      <label>一言コメント <span class="opt">任意</span></label>
+      <p class="field-hint">「なぜこの作品がカスなのか」など自由に。</p>
+      <textarea name="comment" rows="3" maxlength="500" placeholder="カスさの理由、語りたいことなど"></textarea>
+    </div>
+
+    <div class="form-msg kaoty-msg" aria-live="polite"></div>
+    <button type="submit" class="form-submit">ノミネートする</button>
+  </form>
+</section>
+
+<script define:vars={{ GAS_URL, season, LS_KEY, maxNominations }}>
+(function () {
+  const formEl   = document.getElementById(`kaoty-form-${season}`);
+  const alreadyEl = document.getElementById(`kaoty-already-${season}`);
+  const msgEl    = formEl.querySelector('.kaoty-msg');
+
+  // 投稿済みチェック
+  if (localStorage.getItem(LS_KEY)) {
+    formEl.style.display  = 'none';
+    alreadyEl.style.display = '';
+    return;
+  }
+
+  formEl.addEventListener('submit', async e => {
+    e.preventDefault();
+
+    const nominations = Array.from(
+      { length: maxNominations },
+      (_, i) => (formEl.querySelector(`[name=nomination_${i}]`)?.value || '').trim()
+    ).filter(Boolean);
+
+    if (nominations.length === 0) {
+      showMsg('作品名を1つ以上入力してください。', 'error');
+      return;
+    }
+
+    const btn = formEl.querySelector('button[type=submit]');
+    btn.disabled = true;
+    btn.textContent = '送信中...';
+
+    try {
+      await fetch(GAS_URL, {
+        method:  'POST',
+        mode:    'no-cors',
+        headers: { 'Content-Type': 'text/plain' },
+        body:    JSON.stringify({
+          type:          'kaoty',
+          season,
+          submitterName: (formEl.querySelector('[name=submitterName]')?.value || '').trim() || '匿名',
+          nominations,
+          comment:       (formEl.querySelector('[name=comment]')?.value || '').trim(),
+        }),
+      });
+
+      // 投稿済みフラグをlocalStorageに保存（1ブラウザ1回制限）
+      localStorage.setItem(LS_KEY, Date.now().toString());
+
+      formEl.style.display    = 'none';
+      alreadyEl.style.display = '';
+      alreadyEl.querySelector('p').textContent = '✅ ノミネートを受け付けました！ありがとうございます。';
+
+    } catch {
+      showMsg('送信に失敗しました。時間をおいて再度お試しください。', 'error');
+    } finally {
+      btn.disabled    = false;
+      btn.textContent = 'ノミネートする';
+    }
+  });
+
+  function showMsg(text, type) {
+    msgEl.textContent = text;
+    msgEl.className   = `form-msg kaoty-msg form-msg--${type}`;
+  }
+})();
+</script>
+
+<style>
+  .kaoty-title {
+    font-family: var(--decol);
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--accent);
+    margin: 0 0 0.5rem;
+  }
+  .kaoty-desc { margin: 0 0 1rem; }
+
+  .kaoty-meta {
+    margin-bottom: 1.2rem;
+    font-family: var(--sans);
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+
+  .kaoty-notice {
+    border-left: 2px solid var(--rule);
+    padding: 0.5rem 1rem;
+    margin-bottom: 1.8rem;
+    font-size: 0.82rem;
+    color: var(--muted);
+    font-family: var(--sans);
+  }
+  .kaoty-notice p { margin: 0.2rem 0; }
+
+  .kaoty-already {
+    padding: 1rem 1.2rem;
+    background: rgba(49,100,96,0.07);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    font-family: var(--sans);
+    font-size: 0.92rem;
+    color: var(--accent);
+  }
+  .kaoty-already p { margin: 0; }
+
+  .kaoty-form { display: flex; flex-direction: column; gap: 1.4rem; }
+  .form-row   { display: flex; flex-direction: column; gap: 0.4rem; }
+  .form-row label, fieldset legend {
+    font-size: 0.88rem; color: var(--ink); font-family: var(--sans); font-weight: 500;
+  }
+  .field-hint { margin: 0; font-size: 0.78rem; color: var(--muted); font-family: var(--sans); }
+  .req { color: var(--accent); font-size: 0.78rem; margin-left: 0.2rem; }
+  .opt { color: var(--muted);  font-size: 0.75rem; font-weight: 400; margin-left: 0.2rem; }
+
+  .nomination-row {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+  .nomination-num {
+    font-family: var(--sans);
+    font-size: 0.78rem;
+    color: var(--muted);
+    width: 1rem;
+    text-align: right;
+    flex-shrink: 0;
+  }
+  .nomination-row input { flex: 1; }
+
+  .form-row input[type="text"],
+  .form-row textarea {
+    padding: 0.55rem 0.75rem;
+    border: 1px solid var(--rule);
+    border-radius: 3px;
+    background: #faf6ee;
+    font-family: var(--serif);
+    font-size: 0.95rem;
+    color: var(--ink);
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  .form-row input:focus,
+  .form-row textarea:focus { border-color: var(--accent-lt); }
+  .form-row textarea { resize: vertical; }
+
+  .form-msg { font-family: var(--sans); font-size: 0.88rem; min-height: 1.4rem; }
+  .form-msg--success { color: var(--accent); }
+  .form-msg--error   { color: #b04040; }
+
+  .form-submit {
+    align-self: flex-start;
+    padding: 0.65rem 2rem;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    font-family: var(--serif);
+    font-size: 1rem;
+    cursor: pointer;
+    transition: opacity 0.15s;
+  }
+  .form-submit:hover    { opacity: 0.85; }
+  .form-submit:disabled { opacity: 0.5; cursor: default; }
+</style>
