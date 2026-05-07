@@ -1,20 +1,231 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
+import PostList from '@/components/PostList.astro';
+import { getCollection } from 'astro:content';
+
+// うまい店カテゴリの記事一覧
+const spots = (await getCollection('posts', ({ data }) =>
+  !data.draft && data.categories.includes('うまい店')
+)).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+// GAS Web App URL（デプロイ後に差し替え）
+const GAS_URL = 'https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec';
 ---
 
 <BaseLayout title="うまい店一覧">
-  <article class="page-content">
-    <h2>うまい店一覧</h2>
-    <p>おすすめの飲食店を随時追加予定です。</p>
-    <p>お店情報は<a href="/forms/">こちらのフォーム</a>からご投稿ください。</p>
-  </article>
+  <!-- 一覧 -->
+  <section class="umai-list">
+    <h2 class="section-title">うまい店一覧</h2>
+    {spots.length > 0
+      ? <PostList posts={spots} />
+      : <p class="empty-note">まだ投稿がありません。下のフォームからぜひ教えてください。</p>
+    }
+  </section>
+
+  <div class="section-divider"><span class="ornament">◆</span></div>
+
+  <!-- 投稿フォーム -->
+  <section class="umai-form-section">
+    <h2 class="section-title">おすすめのお店を投稿する</h2>
+    <p class="form-desc">関東・関西問わず、おすすめのご飯屋さんや居酒屋を教えてください。内容を確認後に掲載します。</p>
+
+    <form id="umai-form" class="umai-form" novalidate>
+      <div class="form-row">
+        <label for="shopName">店名 <span class="req">*</span></label>
+        <input id="shopName" name="shopName" type="text" placeholder="例: 一蘭 渋谷店" required />
+      </div>
+      <div class="form-row">
+        <label for="area">エリア <span class="req">*</span></label>
+        <input id="area" name="area" type="text" placeholder="例: 渋谷、秋葉原、大阪日本橋" required />
+      </div>
+      <div class="form-row">
+        <label for="genre">ジャンル <span class="req">*</span></label>
+        <select id="genre" name="genre" required>
+          <option value="">選択してください</option>
+          <option>居酒屋</option>
+          <option>バー</option>
+          <option>ランチ</option>
+          <option>カフェ・喫茶店</option>
+          <option>寿司</option>
+          <option>焼き鳥</option>
+          <option>中華</option>
+          <option>デザート・スイーツ</option>
+          <option>その他</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <label for="recommendation">おすすめポイント <span class="req">*</span></label>
+        <textarea id="recommendation" name="recommendation"
+          rows="5" placeholder="何がおすすめか、雰囲気、価格帯など自由に" required></textarea>
+      </div>
+      <div class="form-row">
+        <label for="siteUrl">公式サイト / 食べログ等のURL <span class="opt">任意</span></label>
+        <input id="siteUrl" name="siteUrl" type="url" placeholder="https://..." />
+      </div>
+      <div class="form-row">
+        <label for="submitterName">投稿者名 <span class="opt">任意</span></label>
+        <input id="submitterName" name="submitterName" type="text" placeholder="ニックネームでもOK" />
+      </div>
+
+      <div id="form-msg" class="form-msg" aria-live="polite"></div>
+
+      <button type="submit" class="form-submit">送信する</button>
+    </form>
+  </section>
 </BaseLayout>
 
+<script define:vars={{ GAS_URL }}>
+  const form = document.getElementById('umai-form');
+  const msg  = document.getElementById('form-msg');
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    msg.textContent = '';
+
+    const data = Object.fromEntries(new FormData(form));
+
+    // クライアントサイドバリデーション
+    const required = { shopName: '店名', area: 'エリア', genre: 'ジャンル', recommendation: 'おすすめポイント' };
+    for (const [key, label] of Object.entries(required)) {
+      if (!data[key] || !data[key].trim()) {
+        showMsg(`「${label}」を入力してください。`, 'error');
+        document.getElementById(key).focus();
+        return;
+      }
+    }
+
+    const btn = form.querySelector('button[type=submit]');
+    btn.disabled = true;
+    btn.textContent = '送信中...';
+
+    try {
+      // GAS は CORS 非対応のため no-cors で送信（レスポンスは読めないが受信はされる）
+      await fetch(GAS_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'text/plain' },
+        body: JSON.stringify(data),
+      });
+
+      form.reset();
+      showMsg('送信しました！内容を確認後に掲載します。ありがとうございます 🎉', 'success');
+    } catch (err) {
+      showMsg('送信に失敗しました。時間をおいて再度お試しください。', 'error');
+    } finally {
+      btn.disabled = false;
+      btn.textContent = '送信する';
+    }
+  });
+
+  function showMsg(text, type) {
+    msg.textContent = text;
+    msg.className = 'form-msg form-msg--' + type;
+  }
+</script>
+
 <style>
-  .page-content h2 {
-    font-size: 1.5rem;
+  .umai-list { margin-bottom: 1rem; }
+
+  .section-title {
+    font-size: 1.3rem;
     font-weight: 500;
-    color: var(--green-3);
+    color: var(--accent);
     margin: 0 0 1rem;
   }
+
+  .empty-note {
+    color: var(--muted);
+    font-size: 0.92rem;
+    margin: 0 0 1rem;
+  }
+
+  .section-divider {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin: 2.5rem 0;
+    color: var(--rule);
+  }
+  .section-divider::before,
+  .section-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--rule);
+  }
+  .ornament { font-size: 0.55rem; color: var(--accent); opacity: 0.45; }
+
+  /* フォーム */
+  .umai-form-section { margin-bottom: 2rem; }
+
+  .form-desc {
+    font-size: 0.9rem;
+    color: var(--muted);
+    margin: 0 0 1.5rem;
+  }
+
+  .umai-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+  }
+
+  .form-row {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+
+  .form-row label {
+    font-size: 0.88rem;
+    color: var(--ink);
+    font-family: var(--sans);
+  }
+
+  .req { color: var(--accent); font-size: 0.8rem; }
+  .opt { color: var(--muted); font-size: 0.75rem; }
+
+  .form-row input,
+  .form-row select,
+  .form-row textarea {
+    padding: 0.55rem 0.75rem;
+    border: 1px solid var(--rule);
+    border-radius: 3px;
+    background: #faf6ee;
+    font-family: var(--serif);
+    font-size: 0.95rem;
+    color: var(--ink);
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  .form-row input:focus,
+  .form-row select:focus,
+  .form-row textarea:focus {
+    border-color: var(--accent-lt);
+  }
+
+  .form-row textarea { resize: vertical; }
+
+  .form-msg {
+    font-family: var(--sans);
+    font-size: 0.88rem;
+    min-height: 1.4rem;
+  }
+  .form-msg--success { color: var(--accent); }
+  .form-msg--error   { color: #b04040; }
+
+  .form-submit {
+    align-self: flex-start;
+    padding: 0.6rem 1.8rem;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    font-family: var(--serif);
+    font-size: 1rem;
+    cursor: pointer;
+    transition: opacity 0.15s;
+  }
+  .form-submit:hover   { opacity: 0.85; }
+  .form-submit:disabled { opacity: 0.5; cursor: default; }
 </style>
