@@ -27,6 +27,8 @@ draft: false
 
 SEBASTIANは、ローカル環境で動作するAIタスクマネジメントツールです。
 
+Github: https://github.com/roman-ease/Sebastian
+
 一般的なタスク管理ツールのように、最初から綺麗なタスク名、期限、優先度、カテゴリを入力するのではなく、
 まずは思いついたことや作業メモを雑に書き込みます。
 
