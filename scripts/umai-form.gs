@@ -214,12 +214,18 @@ function commitArticleToGitHub(config, s, imagePaths) {
   const genres = s.genre ? s.genre.split('、').map(g => `"${esc(g)}"`).join(', ') : '';
   const areas  = s.area ? `"${esc(s.area)}"` : '';
 
+  // 1枚目をアイキャッチ（OGP・記事一覧サムネイルにも使用）
+  const eyecatch = imagePaths.length > 0 ? imagePaths[0] : '';
+  // 2枚目以降を本文に掲載
+  const bodyImages = imagePaths.slice(1).map(p => `![${s.shopName}](${p})`).join('\n\n');
+
   const lines = [
     '---',
     `title: "${esc(s.shopName)}（${esc(s.area)}）"`,
     `date: ${date}`,
     `categories: ["うまい店"]`,
     `tags: [${[areas, genres].filter(Boolean).join(', ')}]`,
+    eyecatch ? `image: "${eyecatch}"` : null,
     '---',
     '',
     `**エリア**: ${s.area}  `,
@@ -227,14 +233,14 @@ function commitArticleToGitHub(config, s, imagePaths) {
     `**予算**: ${s.budget || '—'}`,
     '',
     s.recommendation,
-  ];
+  ].filter(l => l !== null);
 
   if (s.link) {
     lines.push('', `**リンク**: [${s.shopName}](${s.link})`);
   }
 
-  if (imageMarkdown) {
-    lines.push('', imageMarkdown);
+  if (bodyImages) {
+    lines.push('', bodyImages);
   }
 
   lines.push('', '---', `*投稿者: ${s.submitterName}*`);

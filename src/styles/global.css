@@ -405,12 +405,26 @@ img { max-width: 100%; height: auto; display: block; }
 .pagination-info { color: var(--muted); font-size: 0.8rem; }
 
 /* ============================
-   アイキャッチサムネイル（一覧）
+   アイキャッチ
 ============================ */
+
+/* 記事一覧サムネイル */
 .post-thumbnail {
   width: 100%;
-  max-height: 220px;
+  height: 200px;
   object-fit: cover;
-  border-radius: 3px;
-  margin-bottom: 0.8rem;
+  border-radius: 4px;
+  margin-bottom: 0.9rem;
+  display: block;
+  transition: opacity 0.15s;
+}
+.post-thumbnail:hover { opacity: 0.88; }
+
+/* 記事詳細ページ eyecatch */
+.post-eyecatch {
+  width: 100%;
+  max-height: 420px;
+  object-fit: cover;
+  border-radius: 4px;
+  margin-bottom: 1.8rem;
 }
