@@ -81,9 +81,12 @@ const LS_KEY  = `kaoty_${season}_submitted`;
 
     <!-- コメント -->
     <div class="form-row">
-      <label>一言コメント <span class="opt">任意</span></label>
-      <p class="field-hint">「なぜこの作品がカスなのか」など自由に。</p>
-      <textarea name="comment" rows="3" maxlength="500" placeholder="カスさの理由、語りたいことなど"></textarea>
+      <label>カスさの理由 <span class="req">*</span>（200字以上）</label>
+      <p class="field-hint">なぜこの作品がカスなのか、しっかり語ってください。200字に満たない場合は受け付けません。</p>
+      <textarea name="comment" rows="6" maxlength="2000"
+        placeholder="カスさの具体的な理由、どこがどうダメだったか、視聴者として何を感じたかなど、熱量を持って書いてください。（200字以上必須）"
+        required></textarea>
+      <p class="comment-counter"><span class="comment-count">0</span> / 2000字（200字以上必須）</p>
     </div>
 
     <div class="form-msg kaoty-msg" aria-live="polite"></div>
@@ -104,6 +107,15 @@ const LS_KEY  = `kaoty_${season}_submitted`;
     return;
   }
 
+  // 文字数カウンター
+  const commentArea  = formEl.querySelector('[name=comment]');
+  const countDisplay = formEl.querySelector('.comment-count');
+  commentArea.addEventListener('input', () => {
+    const len = commentArea.value.length;
+    countDisplay.textContent = len;
+    countDisplay.style.color = len >= 200 ? 'var(--accent)' : '#b04040';
+  });
+
   formEl.addEventListener('submit', async e => {
     e.preventDefault();
 
@@ -114,6 +126,13 @@ const LS_KEY  = `kaoty_${season}_submitted`;
 
     if (nominations.length === 0) {
       showMsg('作品名を1つ以上入力してください。', 'error');
+      return;
+    }
+
+    const comment = (formEl.querySelector('[name=comment]')?.value || '').trim();
+    if (comment.length < 200) {
+      showMsg(`カスさの理由は200字以上必要です（現在${comment.length}字）。`, 'error');
+      formEl.querySelector('[name=comment]').focus();
       return;
     }
 
@@ -235,6 +254,13 @@ const LS_KEY  = `kaoty_${season}_submitted`;
   .form-row textarea:focus { border-color: var(--accent-lt); }
   .form-row textarea { resize: vertical; }
 
+  .comment-counter {
+    margin: 0.2rem 0 0;
+    font-family: var(--sans);
+    font-size: 0.78rem;
+    color: var(--muted);
+    text-align: right;
+  }
   .form-msg { font-family: var(--sans); font-size: 0.88rem; min-height: 1.4rem; }
   .form-msg--success { color: var(--accent); }
   .form-msg--error   { color: #b04040; }
