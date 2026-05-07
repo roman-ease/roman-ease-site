@@ -1,0 +1,57 @@
+---
+import '@/styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const { title, description = 'living in disgrace in Rome' } = Astro.props;
+const siteTitle = 'ローマの生き恥';
+const pageTitle = title ? `${title} – ${siteTitle}` : siteTitle;
+---
+
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <title>{pageTitle}</title>
+    <link rel="icon" href="/uploads/cropped-icon.jpg" />
+  </head>
+  <body>
+    <div class="site-wrapper">
+      <header class="site-header">
+        <a href="/">
+          <img
+            class="header-image"
+            src="/uploads/header-image-roman-ease01.jpg"
+            alt="ローマの生き恥"
+            width="400"
+            height="400"
+          />
+        </a>
+        <nav class="site-nav">
+          <a href="/">ホーム</a>
+          <a href="/profile/">Profile</a>
+          <a href="/forms/">Forms</a>
+          <a href="/umai/">うまい店一覧</a>
+        </nav>
+      </header>
+
+      <main>
+        <slot />
+      </main>
+
+      <footer class="site-footer">
+        <nav class="site-nav">
+          <a href="/">ホーム</a>
+          <a href="/profile/">Profile</a>
+          <a href="/forms/">Forms</a>
+          <a href="/umai/">うまい店一覧</a>
+        </nav>
+      </footer>
+    </div>
+  </body>
+</html>
