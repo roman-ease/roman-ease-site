@@ -8,7 +8,7 @@ const spots = (await getCollection('posts', ({ data }) =>
 )).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 
 // GAS Web App URL — デプロイ後に差し替え
-const GAS_URL = 'https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec';
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbxL6Q9578Tcm5tYXfbWzl09BZ2bb-Tvog87T1T72nD1BNtWc-93qXCEW2b7hJ6COWglEQ/exec';
 ---
 
 <BaseLayout title="うまい店一覧">
