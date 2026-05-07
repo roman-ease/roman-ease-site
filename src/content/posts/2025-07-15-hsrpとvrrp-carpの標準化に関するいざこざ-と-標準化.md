@@ -18,22 +18,17 @@ tags: ["TIL", "ネットワーク", "プロトコル"]
 
 - [関連ワード](#関連ワード)
 
-</li>
-
-<li>[学んだトピック2: 標準化と独占禁止法の関係性](#学んだトピック2-標準化と独占禁止法の関係性)
+[学んだトピック2: 標準化と独占禁止法の関係性](#学んだトピック2-標準化と独占禁止法の関係性)
 
 - [標準化とは何か](#標準化とは何か)
 
 - [独禁法との関連](#独禁法との関連)
 
-</li>
+[振り返り](#振り返り)
 
-<li>[振り返り](#振り返り)</li>
+[明日の学び予定](#明日の学び予定)
 
-<li>[明日の学び予定](#明日の学び予定)</li>
-
-<li>[備考](#備考)</li>
-</ul>
+[備考](#備考)
 
 ---
 
@@ -69,16 +64,11 @@ Ciscoは1990年代初頭にHSRPを開発し、特許を取得。
 
 - 特許が標準化やOSSにとって技術的障壁となることがある。
 
-</li>
-
-<li>**関連情報**:
+**関連情報**:
 
 - [VRRP - Wikipedia](https://en.wikipedia.org/wiki/Virtual_Router_Redundancy_Protocol)
 
 - [CARP - Wikipedia](https://en.wikipedia.org/wiki/Common_Address_Redundancy_Protocol)
-
-</li>
-</ul>
 
 ---
 
@@ -308,18 +298,13 @@ IETF（ふっと笑って）：
 
 - 特許を持っていても、それを盾に競争を妨害すると法的にリスクがある。
 
-</li>
-
-<li>**関連情報**:
+**関連情報**:
 
 - [Rambus antitrust case summary](https://en.wikipedia.org/wiki/Rambus)
 
 - [Microsoft EU Antitrust Case](https://en.wikipedia.org/wiki/Microsoft_Corp_v_Commission)
 
 - [Qualcomm antitrust issues](https://en.wikipedia.org/wiki/Qualcomm)
-
-</li>
-</ul>
 
 ---
 
