@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Noto+Serif+JP:wght@400;500&family=Inter:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol:wght@400;700&family=Kaisei+Tokumin:wght@400;500&family=Inter:wght@400;500&display=swap');
 
 /* ============================
    Design tokens
@@ -13,8 +13,9 @@
 
   --w: 680px;             /* 固定幅 */
 
-  --serif: 'EB Garamond', 'Noto Serif JP', Georgia, serif;
-  --sans:  'Inter', system-ui, sans-serif;
+  --serif:  'Kaisei Tokumin', Georgia, serif;   /* 本文 */
+  --decol:  'Kaisei Decol', serif;              /* タイトル・見出し */
+  --sans:   'Inter', system-ui, sans-serif;
 }
 
 /* ============================
@@ -68,8 +69,9 @@ img { max-width: 100%; height: auto; display: block; }
 
 .site-title {
   margin: 1.2rem 0 0.1rem;
+  font-family: var(--decol);
   font-size: 2rem;
-  font-weight: 500;
+  font-weight: 700;
   letter-spacing: 0.06em;
 }
 .site-title a { color: var(--accent); }
@@ -193,8 +195,9 @@ img { max-width: 100%; height: auto; display: block; }
 
 .post-list-item .post-title {
   margin: 0 0 0.4rem;
+  font-family: var(--decol);
   font-size: 1.5rem;
-  font-weight: 500;
+  font-weight: 700;
   line-height: 1.35;
 }
 /* ⑦ ホバーエフェクト */
@@ -254,8 +257,9 @@ img { max-width: 100%; height: auto; display: block; }
 }
 .post-header h1 {
   margin: 0 0 0.6rem;
+  font-family: var(--decol);
   font-size: 1.8rem;
-  font-weight: 500;
+  font-weight: 700;
   line-height: 1.45;
   color: var(--accent);
 }
@@ -266,8 +270,9 @@ img { max-width: 100%; height: auto; display: block; }
 .post-content h2,
 .post-content h3,
 .post-content h4 {
+  font-family: var(--decol);
   color: var(--accent);
-  font-weight: 500;
+  font-weight: 700;
   margin-top: 2rem;
   line-height: 1.4;
 }
@@ -373,8 +378,9 @@ img { max-width: 100%; height: auto; display: block; }
 }
 .archive-title {
   margin: 0.1rem 0 0.2rem;
+  font-family: var(--decol);
   font-size: 1.6rem;
-  font-weight: 500;
+  font-weight: 700;
   color: var(--accent);
 }
 .archive-count {
