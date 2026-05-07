@@ -15,6 +15,19 @@ const pageDesc    = description ?? siteDesc;
 const defaultOg   = '/uploads/2024/12/header-image-roman-ease01.jpg';
 const ogImageUrl  = new URL(ogImage ?? defaultOg, Astro.site).toString();
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+
+const pathname = Astro.url.pathname;
+function isActive(href: string) {
+  if (href === '/') return pathname === '/';
+  return pathname.startsWith(href);
+}
+
+const navLinks = [
+  { href: '/forms/',   label: 'Forms' },
+  { href: '/',         label: 'Home' },
+  { href: '/profile/', label: 'Profile' },
+  { href: '/umai/',    label: 'うまい店一覧' },
+];
 ---
 
 <!doctype html>
@@ -39,9 +52,9 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <meta name="twitter:image"      content={ogImageUrl} />
 
     <title>{pageTitle}</title>
-    <link rel="icon" type="image/png" href="/uploads/2024/12/logo.png" />
-    <link rel="apple-touch-icon" href="/uploads/2024/12/icon.jpg" />
-    <link rel="alternate"  type="application/rss+xml" title={siteTitle} href="/rss.xml" />
+    <link rel="icon"       type="image/png" href="/uploads/2024/12/logo.png" />
+    <link rel="apple-touch-icon"            href="/uploads/2024/12/icon.jpg" />
+    <link rel="alternate" type="application/rss+xml" title={siteTitle} href="/rss.xml" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   </head>
@@ -60,13 +73,14 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
         <h1 class="site-title"><a href="/">{siteTitle}</a></h1>
         <p class="site-description">{siteDesc}</p>
         <nav class="site-nav">
-          <a href="/forms/">Forms</a>
-          <a href="/">Home</a>
-          <a href="/profile/">Profile</a>
-          <a href="/umai/">うまい店一覧</a>
+          {navLinks.map(({ href, label }) => (
+            <a href={href} class:list={['nav-link', { 'nav-link--active': isActive(href) }]}>
+              {label}
+            </a>
+          ))}
         </nav>
         <div class="header-separator">
-          <span class="ornament">◆</span>
+          <span class="separator-ornament">✦ ◆ ✦</span>
         </div>
       </header>
 
@@ -76,17 +90,16 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
       <footer class="site-footer">
         <div class="footer-separator">
-          <span class="ornament">◆</span>
+          <span class="separator-ornament">✦ ◆ ✦</span>
         </div>
         <nav class="site-nav">
-          <a href="/forms/">Forms</a>
-          <a href="/">Home</a>
-          <a href="/profile/">Profile</a>
-          <a href="/umai/">うまい店一覧</a>
+          {navLinks.map(({ href, label }) => (
+            <a href={href} class:list={['nav-link', { 'nav-link--active': isActive(href) }]}>
+              {label}
+            </a>
+          ))}
         </nav>
-        <p class="footer-rss">
-          <a href="/rss.xml">RSS</a>
-        </p>
+        <p class="footer-rss"><a href="/rss.xml">RSS</a></p>
       </footer>
     </div>
   </body>

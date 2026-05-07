@@ -5,4 +5,10 @@ export default defineConfig({
   output: 'static',
   site: 'https://www.roman-ease.com',
   integrations: [sitemap()],
+  markdown: {
+    shikiConfig: {
+      theme: 'github-light',
+      wrap: true,
+    },
+  },
 });
