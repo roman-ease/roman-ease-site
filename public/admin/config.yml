@@ -2,9 +2,8 @@ backend:
   name: github
   repo: roman-ease/roman-ease-site
   branch: main
-  # GitHub OAuth App の Client ID を設定（下記セットアップ手順参照）
-  # auth_type: pkce
-  # app_id: YOUR_GITHUB_OAUTH_CLIENT_ID
+  auth_type: pkce
+  app_id: Ov23li5zG6wWefYBBKoU
 
 media_folder: public/uploads/{{year}}/{{month}}
 public_folder: /uploads/{{year}}/{{month}}
