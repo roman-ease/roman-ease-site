@@ -2,7 +2,7 @@ import { defineConfig } from 'astro/config';
 
 export default defineConfig({
   output: 'static',
-  site: 'https://www.roman-ease.com',
+  site: 'https://roman-ease.com',
   integrations: [],
   markdown: {
     shikiConfig: {
