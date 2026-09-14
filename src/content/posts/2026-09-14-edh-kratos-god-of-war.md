@@ -56,7 +56,7 @@ MTGには戦闘フェイズという立派なルールがあります。
 
 ### 《Kratos, God of War》
 
-<img src="" width="50%"
+<img src="https://cards.scryfall.io/display/front/f/b/fb97e2a1-0e86-4c12-8d31-6ff7b825ca10.webp?1783905133" width="50%"
 
 『God of War』とのSecret Lairコラボで登場した、ギリシャ時代のKratos。
 
@@ -134,7 +134,7 @@ Kratosがいると、クリーチャーを並べて守りを固めるという�
 
 ### 《ゴブリンの密偵長/Goblin Spymaster》
 
-<img src="" width="50%"
+<img src="https://cards.scryfall.io/display/front/b/8/b8cb9cf1-43f0-430a-92b9-4e97a7098429.webp?1782849023" width="50%"
 
 対戦相手の終了ステップに、1/1のゴブリンを1体プレゼントします。
 
@@ -164,7 +164,7 @@ Kratosがいると、クリーチャーを並べて守りを固めるという�
 
 ## 《卑血の芙巳子》もいます
 
-<img src="" width="50%"
+<img src="https://cards.scryfall.io/display/front/8/2/824bf5d5-3ec2-45bf-8716-fc2e1a698dcc.webp?1782909284" width="50%"
 
 《卑血の芙巳子/Fumiko the Lowblood》も同じ方向性。
 
@@ -228,7 +228,7 @@ Kratosは、存在しないクリーチャーに攻撃を要求することは�
 
 ### 《キイェルドーの背信者、ヴァーチャイルド》
 
-<img src="" width="50%"
+<img src="https://cards.scryfall.io/display/front/0/d/0df312b3-b4cf-4c0b-9f91-186b53d38830.webp?1782929103" width="50%"
 
 ヴァーチャイルドがプレイヤーに戦闘ダメージを与えると、そのプレイヤーのところに1/1の生存者トークンが並びます。
 
@@ -246,7 +246,7 @@ Kratosがいれば殴らず残すとその分ダメージを受けるので、�
 
 ## 《アクロスの木馬》
 
-<img src="" width="50%"
+<img src="https://cards.scryfall.io/display/front/4/7/47b693c0-8efd-4e19-9c07-d7ace08ef6da.webp?1782946253" width="50%"
 
 こちらもプレゼントカード。
 
