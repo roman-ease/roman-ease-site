@@ -9,7 +9,7 @@ tags:
   - EDHデッキ紹介
 image: /uploads/2026/09/EDH-kratos.png
 description: ''
-draft: true
+draft: false
 ---
 
 ## はじめに
