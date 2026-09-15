@@ -134,7 +134,7 @@ Kratosがいると、クリーチャーを並べて守りを固めるという�
 
 ### 《ゴブリンの密偵長/Goblin Spymaster》
 
-<img src="" width="50%">
+<img src="https://cards.scryfall.io/display/front/b/8/b8cb9cf1-43f0-430a-92b9-4e97a7098429.webp?1782849023" width="50%">
 
 対戦相手の終了ステップに、1/1のゴブリンを1体プレゼントします。
 
@@ -166,7 +166,7 @@ Kratosがいると、クリーチャーを並べて守りを固めるという�
 
 《卑血の芙巳子/Fumiko the Lowblood》も同じ方向性。
 
-<img src="" width="50%">
+<img src="https://cards.scryfall.io/display/front/8/2/824bf5d5-3ec2-45bf-8716-fc2e1a698dcc.webp?1782909284" width="50%">
 
 対戦相手のクリーチャーに、
 
@@ -228,7 +228,7 @@ Kratosは、存在しないクリーチャーに攻撃を要求することは�
 
 ### 《キイェルドーの背信者、ヴァーチャイルド》
 
-<img src="" width="50%">
+<img src="https://cards.scryfall.io/display/front/0/d/0df312b3-b4cf-4c0b-9f91-186b53d38830.webp?1782929103" width="50%">
 
 ヴァーチャイルドがプレイヤーに戦闘ダメージを与えると、そのプレイヤーのところに1/1の生存者トークンが並びます。
 
@@ -246,7 +246,7 @@ Kratosがいれば殴らず残すとその分ダメージを受けるので、�
 
 ## 《アクロスの木馬》
 
-<img src="" width="50%">
+<img src="https://cards.scryfall.io/display/front/4/7/47b693c0-8efd-4e19-9c07-d7ace08ef6da.webp?1782946253" width="50%">
 
 こちらもプレゼントカード。
 
@@ -275,7 +275,7 @@ Kratosがいれば殴らず残すとその分ダメージを受けるので、�
 
 ### 《Ellie, Brick Master》
 
-<img src="" width="50%">
+<img src="https://cards.scryfall.io/display/front/e/9/e973462f-589d-4c53-81d7-075ec1d5a9b4.webp?1783905138" width="50%">
 
 相手が**こちら以外の対戦相手を攻撃すると**、攻撃している状態で1/1の感染者を追加します。
 
@@ -301,7 +301,7 @@ Kratosが鞭担当なら、Ellieは飴担当。
 
 ## 《豪奢の呪い》で賞金首を作る
 
-<img src="" width="50%">
+<img src="https://cards.scryfall.io/display/front/d/0/d058e7be-83f8-4c56-9643-3f27db78c3e6.webp?1782773545" width="50%">
 
 《豪奢の呪い/Curse of Opulence》を誰かにつけておけば、そのプレイヤーを殴ると金がもらえます。
 
@@ -351,7 +351,7 @@ Kratosに任せます。
 
 ## 《切望の宝石》は奪い合ってください
 
-<img src="" width="50%">
+<img src="https://cards.scryfall.io/display/front/0/0/006cdfcc-6180-4ea0-9b18-d5d1f3e61cbb.webp?1782787554" width="50%">
 
 《切望の宝石/Coveted Jewel》は、出すと3枚引けて、3マナ出せる非常に強力なアーティファクト。
 
@@ -406,7 +406,7 @@ Kratosがすべてのクリーチャーへ速攻を与えるため、
 
 ## 《コスモスの門徒、アレクシオス》
 
-<img src="" width="50%">
+<img src="https://cards.scryfall.io/display/front/0/8/084a05db-8847-4288-aebe-4cc9e068d595.webp?1782791157" width="50%">
 
 このデッキでかなり好きなカードの一つ。
 
@@ -426,9 +426,10 @@ Kratosがすべてのクリーチャーへ速攻を与えるため、
 
 ### 《世界大戦/World at War》
 
-<img src="" width="50%">
+<img src="https://cards.scryfall.io/display/front/e/8/e8673f2b-151b-4545-aae2-96efc6442ea5.webp?1783905137" width="50%">
 
 カード名からして採用理由は十分です。
+画像のものはクレイトスと同じGod of WarのSecret Lairに収録された特殊イラストのものです。
 
 追加戦闘。
 
