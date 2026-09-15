@@ -56,7 +56,7 @@ MTGには戦闘フェイズという立派なルールがあります。
 
 ### 《Kratos, God of War》
 
-<img src="" width="50%">
+<img src="https://cards.scryfall.io/display/front/f/b/fb97e2a1-0e86-4c12-8d31-6ff7b825ca10.webp?1783905133" width="50%">
 
 『God of War』とのSecret Lairコラボで登場した、ギリシャ時代のKratos。
 
